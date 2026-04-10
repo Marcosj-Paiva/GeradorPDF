@@ -1,5 +1,6 @@
 import flet as ft
 import re
+from database.db import inserir_motorista
 
 def cadastroView(page: ft.Page):
 
@@ -167,6 +168,14 @@ def cadastroView(page: ft.Page):
 
         if not erro:
             print("Nome validado com sucesso!")
+            inserir_motorista(
+                campo_nome.value,
+                campo_rg.value,
+                campo_cpf.value,
+                dropdown_area.value,
+                campo_usuario.value,
+                campo_senha.value
+            )
             page.go("/login")
 
     return ft.View(

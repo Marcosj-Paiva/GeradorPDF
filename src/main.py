@@ -4,8 +4,13 @@ from views.homeView import homeView
 from views.gerarPDFView import gerarPDFView
 from views.carregamentoView import carregamentoView
 from views.cadastroView import cadastroView
+from database.db import conectar
 
 def main(page: ft.Page):
+    conn = conectar()
+    print("Banco conectado com sucesso!")
+    conn.close()
+
     page.title = "Requerimento de Diárias"
 
     page.assets_dir = "assets"
