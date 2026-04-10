@@ -3,6 +3,7 @@ from views.loginView import loginView
 from views.homeView import homeView
 from views.gerarPDFView import gerarPDFView
 from views.carregamentoView import carregamentoView
+from views.cadastroView import cadastroView
 
 def main(page: ft.Page):
     page.title = "Requerimento de Diárias"
@@ -25,11 +26,13 @@ def main(page: ft.Page):
             page.views.append(gerarPDFView(page))
         elif page.route == "/carregamento":
             page.views.append(carregamentoView(page))
+        elif page.route == "/cadastro":
+            page.views.append(cadastroView(page))
 
         page.update()
 
     page.on_route_change = route_change
     
-    page.go("/home")
+    page.go("/login")
 
 ft.app(target=main)
