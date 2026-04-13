@@ -36,6 +36,7 @@ def loginView(page: ft.Page):
 
         if user:
             print("Login OK")
+            page.user = user 
             page.go("/home")
         else:
             mostrar_erro("Usuário ou senha incorretos")

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        margin: 0;
+        padding: 10px;
+    }
+
+    .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: auto;
+    }
+
+    .section {
+        border: 2px solid black;
+        margin-bottom: 10px;
+    }
+
+    .header {
+        position: relative;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .header img {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        width: 80px;
+    }
+
+    .header-text {
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 1.4;
+    }
+
+    .title {
+        text-align: center;
+        font-size: 16px;
+        border-top: 2px solid black;
+        border-bottom: 2px solid black;
+        padding: 5px;
+    }
+
+    .row {
+        border-bottom: 1px solid black;
+        display: block;
+        width: 100%;
+        min-height: 25px;
+    }
+
+    .col {
+        display: inline-block;
+        width: 49%;
+        padding: 4px;
+        vertical-align: top;
+    }
+
+    .col-full {
+        width: 100%;
+    }
+
+    .border-left {
+        border-left: 1px solid black;
+    }
+
+    .label {
+        display: block;
+    }
+
+    .assinaturas {
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    .linha {
+        margin-top: 40px;
+        border-top: 1px solid black;
+        width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="section">
+
+        <div class="header">
+            <img src="data:image/png;base64,{{logo}}">
+            <div class="header-text">
+                PREFEITURA MUNICIPAL DE SÃO SEBASTIÃO DO ANTA<br>
+                CNPJ: 01.613.123/0001-60<br>
+                ESTADO DE MINAS GERAIS
+            </div>
+        </div>
+
+        <div class="title">REQUERIMENTO DE CONCESSÃO DE DIÁRIAS</div>
+
+        <div class="row">
+            <div class="col col-full">NOME: {{nome}}</div>
+        </div>
+
+        <div class="row">
+            <div class="col">RG: {{rg}}</div>
+            <div class="col border-left">CPF: {{cpf}}</div>
+        </div>
+
+        <div class="row">
+            <div class="col col-full">
+                JUSTIFICATIVA: {{justificativa}} - {{pacientes}}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">LOCAL DA SAÍDA: {{local_saida}}</div>
+            <div class="col border-left">DATA: {{data_saida}}</div>
+        </div>
+
+        <div class="row">
+            <div class="col">DESTINO: {{destino}}</div>
+            <div class="col border-left">DATA: {{data_chegada}}</div>
+        </div>
+
+        <div class="assinaturas">
+            <div class="linha"></div>
+            ASSINATURA DO REQUERENTE
+
+            <br><br>
+
+            <div class="linha"></div>
+            AUTORIZAÇÃO DO CHEFE
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <div class="title">PRESTAÇÃO DE CONTAS</div>
+
+        <div class="row">
+            <div class="col col-full">NOME: {{nome}}</div>
+        </div>
+
+        <div class="row">
+            <div class="col col-full">RG: {{rg}}</div>
+        </div>
+
+        <div class="row">
+            <div class="col col-full">LOTAÇÃO: {{lotacao}}</div>
+        </div>
+
+        <div class="row">
+            <div class="col col-full">
+                FINALIDADE: {{justificativa}} - {{pacientes}}
+            </div>
+        </div>
+
+        <div class="row" style="height: 80px;">
+            <div class="col col-full">DESCRIÇÃO DAS ATIVIDADES:</div>
+        </div>
+
+        <div class="row" style="height: 80px;">
+            <div class="col col-full">DOCUMENTOS ANEXADOS:</div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

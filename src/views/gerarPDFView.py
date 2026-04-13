@@ -1,4 +1,10 @@
 import flet as ft
+from utils.gerar_pdf import gerar_pdf, preencher_html
+from utils.gerar_pdf import imagem_para_base64
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+html_path = os.path.join(BASE_DIR, "pdf2.html")
 
 def gerarPDFView(page: ft.Page):
 
@@ -101,11 +107,46 @@ def gerarPDFView(page: ft.Page):
         ]
     )
 
+    def criar_pdf(e):
+
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        caminho_img = os.path.join(BASE_DIR, "brasao.png")
+
+        logo_base64 = imagem_para_base64(caminho_img)
+        
+        user = getattr(page, "user", None)
+
+        lista_pacientes = [c.value for c in campos_pacientes if c.value]
+
+        dados = {
+            "logo": logo_base64,
+            "nome": user[1] if user else "",
+            "rg": user[2] if user else "",     
+            "cpf": user[3] if user else "",    
+            "lotacao": user[4] if user else "",  
+            "destino": campo_destino.value,
+            "local_saida": campo_local_saida.value,
+            "data_saida": campo_data_saida.value,
+            "data_chegada": campo_data_chegada.value,
+            "justificativa": dropdown_justificativa.value,
+            "pacientes": ", ".join(lista_pacientes),
+        }
+
+        with open(html_path, "r", encoding="utf-8") as f:
+            html = f.read()
+
+        html_final = preencher_html(html, dados)
+
+        gerar_pdf(html_final, "relatorio.pdf")
+
+        print("PDF gerado com sucesso!")
+
     return ft.View(
         route="/gerarPDF",
         controls=[
             ft.Container(
                 expand=True,
+                bgcolor= ft.Colors.WHITE,
                 content=ft.Column(
                     scroll=ft.ScrollMode.AUTO,
                     spacing=12,
@@ -147,6 +188,7 @@ def gerarPDFView(page: ft.Page):
                                 bgcolor="#6fa8ff",
                                 color="white",
                             ),
+                            on_click=criar_pdf
                         ),
                     ],
                 ),

@@ -5,14 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Requerimento e Prestação de Contas de Diárias</title>
     <style>
+        * {
+            box-sizing: border-box;
+            letter-spacing: normal !important;
+            word-spacing: normal !important;
+            font-kerning: normal;
+        }
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            /*font-family: "DejaVu Sans", sans-serif;
+            letter-spacing: normal;
+            word-spacing: normal;
             font-size: 12px;
             margin: 0;
             padding: 20px;
             display: flex;
             justify-content: center;
-            background-color: #f0f0f0;
+            background-color: #f0f0f0;*/
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            letter-spacing: 0px;
+            word-spacing: 0px;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
         }
 
         .page {
@@ -20,6 +39,8 @@
             background-color: white;
             padding: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            height: 297mm;
+            margin: 0 auto;
         }
 
         .section {
@@ -28,11 +49,25 @@
         }
 
         .header {
-            display: flex;
-            align-items: center;
+            display: table;
+            width: 100%;
+        }
+
+        .header img {
+            display: table-cell;
+            vertical-align: middle;
+            width: 110px;
+            position: relative;
+            top: 15px;
+            left: 15px;
+        }
+
+        .header-text {
+            display: table-cell;
+            vertical-align: middle;
             text-align: center;
-            padding: 10px;
-            /*border-bottom: 2px solid black;*/
+            font-weight: bold;
+            font-size: 19px;
         }
 
         .logo-box {
@@ -58,15 +93,17 @@
             text-align: center;
             font-size: 22px;
             font-weight: normal;
-            /*padding: 10px 0;*/
+            padding: 10px 0;
             border-bottom: 2px solid black;
             text-transform: uppercase;
         }
 
         .row {
             border-bottom: 1px solid black;
-            display: flex;
+            display: block;
             min-height: 25px;
+            display: table;
+            width: 100%;
         }
         
         .row:last-child {
@@ -78,6 +115,7 @@
             padding: 2px 5px;
             display: flex;
             flex-direction: column;
+            display: table-cell;
         }
 
         .col-border-left {
@@ -110,7 +148,6 @@
             flex-direction: column;
             align-items: center;
         }
-
         .footer-auth {
             padding: 10px;
             font-size: 11px;
@@ -170,7 +207,7 @@
     
     <div class="section">
         <div class="header">
-            <img src="../assets/brasao.png" alt="Brasao Prefeitura">
+            <img src="data:image/png;base64,{{logo}}">
             <div class="header-text">
                 PREFEITURA MUNICIPAL DE SÃO SEBASTIÃO DO ANTA<br>
                 CNPJ: 01.613.123/0001-60<br>
@@ -184,7 +221,7 @@
 
         <div class="row">
             <div class="col">
-                <span class="label">NOME: {{nome}}</span>
+                <div class="label">NOME: {{nome}}</div>
             </div>
         </div>
 
@@ -193,10 +230,10 @@
 
         <div class="row">
             <div class="col">
-                <span class="label">RG: {{rg}}</span>
+                <div class="label">RG: {{rg}}</div>
             </div>
             <div class="col col-border-left">
-                <span class="label">CPF: {{cpf}}</span>
+                <div class="label">CPF: {{cpf}}</div>
             </div>
         </div>
 
@@ -204,16 +241,16 @@
 
         <div class="row textarea-medium double-border-bottom">
             <div class="col">
-                <span class="label">JUSTIFICATIVA / OBJETO DA VIAGEM: {{justificativa}} {{pacientes}}</span>
+                <div class="label">JUSTIFICATIVA / OBJETO DA VIAGEM: {{justificativa}} - {{pacientes}}</div>
             </div>
         </div>
 
         <div class="row">
             <div class="col">
-                <span class="label">LOCAL DA SAÍDA: {{local_saida}}</span>
+                <div class="label">LOCAL DA SAÍDA: {{local_saida}}</div>
             </div>
             <div class="col col-border-left">
-                <span class="label">DATA DA SAÍDA: {{data_saida}}</span>
+                <div class="label">DATA DA SAÍDA: {{data_saida}}</div>
             </div>
         </div>
 
@@ -221,21 +258,21 @@
 
         <div class="row double-border-bottom">
             <div class="col">
-                <span class="label">DESTINO: {{destino}}</span>
+                <div class="label">DESTINO: {{destino}}</div>
             </div>
             <div class="col col-border-left">
-                <span class="label">DATA DA CHEGADA: {{data_chegada}}</span>
+                <label class="label">DATA DA CHEGADA: {{data_chegada}}</label>
             </div>
         </div>
 
         <div class="signatures">
             <div class="signature-block">
-                <span>ASSINATURA DO REQUERENTE:</span>
-                <span>DATA ____/____/20____.</span>
+                <label>ASSINATURA DO REQUERENTE:</label>
+                <label>DATA ____/____/20____.</label>
             </div>
             <div class="signature-block">
-                <span>AUTORIZAÇÃO DO CHEFE:</span>
-                <span>DATA ____/____/20____.</span>
+                <label>AUTORIZAÇÃO DO CHEFE:</label>
+                <label>DATA ____/____/20____.</label>
             </div>
         </div>
 

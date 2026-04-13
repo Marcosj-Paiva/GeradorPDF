@@ -2,71 +2,113 @@ import flet as ft
 
 def homeView(page: ft.Page):
 
-    lista_pdfs = [
-        {"titulo": "Viagem BH", "data": "01/04/2026"},
-        {"titulo": "Viagem SP", "data": "05/04/2026"},
-        {"titulo": "Reunião RJ", "data": "10/04/2026"},
+    user = getattr(page, "user", None)
+
+    if not user:
+        return ft.View(
+            route="/home",
+            controls=[
+                ft.Text("Usuário não logado"),
+                ft.ElevatedButton("Voltar", on_click=lambda e: page.go("/login"))
+            ]
+        )
+
+    nome = user[1]
+
+    def sair(e):
+        page.user = None
+        page.go("/login")
+
+    # 🔥 LISTA MOCK (depois vem do banco)
+    pdfs = [
+        {"destino": "Vitória", "data": "10/04/2026"},
+        {"destino": "Belo Horizonte", "data": "08/04/2026"},
+        {"destino": "São Paulo", "data": "05/04/2026"},
     ]
 
-    def abrir_pdf(e):
-        print("Abrir PDF")
-
+    # 🔥 função pra criar card
     def criar_card(pdf):
         return ft.Container(
-            width=320,
-            padding=15,
+            width=300,
+            padding=10,
             border_radius=15,
             bgcolor="white",
-            shadow=ft.BoxShadow(
-                blur_radius=10,
-                color="black12"
-            ),
-            content=ft.Row(
-                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+            content=ft.Column(
+                spacing=5,
                 controls=[
-                    ft.Column(
-                        spacing=5,
+                    ft.Text(pdf["destino"], size=16, weight="bold"),
+                    ft.Text(f'Data: {pdf["data"]}', size=12),
+                    ft.Row(
+                        alignment=ft.MainAxisAlignment.END,
                         controls=[
-                            ft.Text(pdf["titulo"], weight="bold"),
-                            ft.Text(pdf["data"], size=12, color="grey"),
-                        ],
-                    ),
-                    ft.IconButton(
-                        icon=ft.Icons.PICTURE_AS_PDF,
-                        icon_color="red",
-                        on_click=abrir_pdf
+                            ft.IconButton(
+                                icon=ft.Icons.PICTURE_AS_PDF,
+                                tooltip="Abrir PDF",
+                                on_click=lambda e: print("abrir pdf")
+                            )
+                        ]
                     )
-                ],
-            ),
+                ]
+            )
         )
 
     return ft.View(
         route="/home",
+        scroll=ft.ScrollMode.AUTO,
         controls=[
             ft.Container(
                 expand=True,
-                bgcolor="#f5f7fb",
-                padding=20,
+                gradient=ft.LinearGradient(
+                    colors=["#5f63f2", "#6f86ff"],
+                    begin=ft.Alignment(-1, -1),
+                    end=ft.Alignment(1, 1),
+                ),
                 content=ft.Column(
-                    scroll=ft.ScrollMode.AUTO,
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                     controls=[
+                        ft.Container(height=40),
 
                         ft.Text(
-                            "Meus PDFs",
-                            size=22,
-                            weight="bold"
+                            f"Bem-vindo, {nome} 👋",
+                            size=24,
+                            weight=ft.FontWeight.BOLD,
+                            color="white",
                         ),
 
                         ft.Container(height=10),
 
-                        *[criar_card(pdf) for pdf in lista_pdfs],
+                        ft.Text(
+                            "Seus PDFs",
+                            size=18,
+                            color="white"
+                        ),
+
+                        ft.Container(height=10),
+
+                        ft.Container(
+                            height=300,  
+                            width=320,
+                            bgcolor=ft.Colors.WHITE24,  # branco transparente
+                            border_radius=15,
+                            padding=10,
+                            content=ft.Column(
+                                scroll=ft.ScrollMode.AUTO,  
+                                spacing=10,
+                                controls=[criar_card(pdf) for pdf in pdfs]
+                            )
+                        ),
 
                         ft.Container(height=20),
 
                         ft.ElevatedButton(
-                            "Novo PDF",
-                            icon=ft.Icons.ADD,
+                            "Gerar PDF",
                             on_click=lambda e: page.go("/gerarPDF")
+                        ),
+
+                        ft.TextButton(
+                            "Sair",
+                            on_click=sair,
+                            style=ft.ButtonStyle(color="white")
                         )
                     ],
                 ),
