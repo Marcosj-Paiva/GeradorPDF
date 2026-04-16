@@ -1,4 +1,8 @@
 import flet as ft
+from database.db import buscar_requerimentos_por_motorista
+from utils.sessao import limpar_usuario
+import os
+import webbrowser
 
 def homeView(page: ft.Page):
 
@@ -17,16 +21,27 @@ def homeView(page: ft.Page):
 
     def sair(e):
         page.user = None
+        limpar_usuario()
         page.go("/login")
 
-    # 🔥 LISTA MOCK (depois vem do banco)
+    dados_db = buscar_requerimentos_por_motorista(user[0])
+
     pdfs = [
-        {"destino": "Vitória", "data": "10/04/2026"},
-        {"destino": "Belo Horizonte", "data": "08/04/2026"},
-        {"destino": "São Paulo", "data": "05/04/2026"},
+        {
+            "id": row[0],
+            "destino": row[1],
+            "data": row[2],
+            "arquivo": row[3],
+        }
+        for row in dados_db
     ]
 
-    # 🔥 função pra criar card
+    def abrir_pdf(caminho):
+        if caminho and os.path.exists(caminho):
+            webbrowser.open(caminho)
+        else:
+            print("Arquivo não encontrado")
+
     def criar_card(pdf):
         return ft.Container(
             width=300,
@@ -44,7 +59,7 @@ def homeView(page: ft.Page):
                             ft.IconButton(
                                 icon=ft.Icons.PICTURE_AS_PDF,
                                 tooltip="Abrir PDF",
-                                on_click=lambda e: print("abrir pdf")
+                                on_click=lambda e, caminho=pdf["arquivo"]: abrir_pdf(caminho)
                             )
                         ]
                     )
@@ -88,7 +103,7 @@ def homeView(page: ft.Page):
                         ft.Container(
                             height=300,  
                             width=320,
-                            bgcolor=ft.Colors.WHITE24,  # branco transparente
+                            bgcolor=ft.Colors.WHITE24,  
                             border_radius=15,
                             padding=10,
                             content=ft.Column(

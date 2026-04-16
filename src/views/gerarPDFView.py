@@ -1,10 +1,17 @@
 import flet as ft
-from utils.gerar_pdf import gerar_pdf, preencher_html
-from utils.gerar_pdf import imagem_para_base64
 import os
+from datetime import datetime
+import webbrowser
+from utils.sobreEscreverPDF import criar_overlay
+from utils.sobreEscreverPDF import gerar_pdf_final
+from database.db import salvar_requerimento
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-html_path = os.path.join(BASE_DIR, "pdf2.html")
+html_path = os.path.join(BASE_DIR, "pdf.html")
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+pasta_pdfs = os.path.join(BASE_DIR, "..", "pdfs")
 
 def gerarPDFView(page: ft.Page):
 
@@ -61,6 +68,16 @@ def gerarPDFView(page: ft.Page):
         ],
     )
 
+    seta = ft.Container(
+        padding=10,
+        alignment=ft.Alignment.TOP_LEFT,
+        content=ft.IconButton(
+            icon=ft.Icons.ARROW_BACK,
+            icon_color="white",
+            on_click=lambda e: page.go("/home")
+        )
+    )
+
     campo_data_saida = ft.TextField(
         hint_text="Data de Saída",
         border=ft.InputBorder.UNDERLINE,
@@ -109,21 +126,15 @@ def gerarPDFView(page: ft.Page):
 
     def criar_pdf(e):
 
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        caminho_img = os.path.join(BASE_DIR, "brasao.png")
-
-        logo_base64 = imagem_para_base64(caminho_img)
-        
         user = getattr(page, "user", None)
 
         lista_pacientes = [c.value for c in campos_pacientes if c.value]
 
         dados = {
-            "logo": logo_base64,
             "nome": user[1] if user else "",
-            "rg": user[2] if user else "",     
-            "cpf": user[3] if user else "",    
-            "lotacao": user[4] if user else "",  
+            "rg": user[2] if user else "",
+            "cpf": user[3] if user else "",
+            "lotacao": user[4] if user else "",
             "destino": campo_destino.value,
             "local_saida": campo_local_saida.value,
             "data_saida": campo_data_saida.value,
@@ -132,14 +143,26 @@ def gerarPDFView(page: ft.Page):
             "pacientes": ", ".join(lista_pacientes),
         }
 
-        with open(html_path, "r", encoding="utf-8") as f:
-            html = f.read()
+        criar_overlay(dados)
 
-        html_final = preencher_html(html, dados)
+        caminho_pdf = gerar_pdf_final() 
 
-        gerar_pdf(html_final, "relatorio.pdf")
+        salvar_requerimento({
+            "motorista_id": user[0],
+            "destino": campo_destino.value,
+            "local_saida": campo_local_saida.value,
+            "data_saida": campo_data_saida.value,
+            "data_chegada": campo_data_chegada.value,
+            "justificativa": dropdown_justificativa.value,
+            "pacientes": ", ".join(lista_pacientes),
+            "arquivo_pdf": caminho_pdf
+        })
 
-        print("PDF gerado com sucesso!")
+        webbrowser.open(caminho_pdf)
+
+        print("PDF final gerado com sucesso!")
+
+        page.go("/home")
 
     return ft.View(
         route="/gerarPDF",
@@ -155,6 +178,7 @@ def gerarPDFView(page: ft.Page):
                     controls=[
 
                         ft.Container(
+                            seta,
                             height=120,
                             width=350,
                             border_radius=ft.border_radius.only(

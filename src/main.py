@@ -5,6 +5,9 @@ from views.gerarPDFView import gerarPDFView
 from views.carregamentoView import carregamentoView
 from views.cadastroView import cadastroView
 from database.db import conectar
+from database.db import buscar_usuario_por_id
+from utils.sessao import carregar_usuario
+
 
 def main(page: ft.Page):
     conn = conectar()
@@ -37,7 +40,18 @@ def main(page: ft.Page):
         page.update()
 
     page.on_route_change = route_change
-    
-    page.go("/login")
+
+    user_id = carregar_usuario()
+
+    if user_id:
+        user = buscar_usuario_por_id(user_id)
+
+        if user:
+            page.user = user
+            page.go("/home")
+        else:
+            page.go("/login")
+    else:
+        page.go("/login")
 
 ft.app(target=main)

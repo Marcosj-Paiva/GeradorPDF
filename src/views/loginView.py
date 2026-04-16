@@ -1,5 +1,6 @@
 import flet as ft
 from database.db import verificar_login
+from utils.sessao import salvar_usuario
 
 def loginView(page: ft.Page):
 
@@ -36,7 +37,8 @@ def loginView(page: ft.Page):
 
         if user:
             print("Login OK")
-            page.user = user 
+            page.user = user
+            salvar_usuario(user[0])
             page.go("/home")
         else:
             mostrar_erro("Usuário ou senha incorretos")
