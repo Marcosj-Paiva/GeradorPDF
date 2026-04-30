@@ -32,6 +32,8 @@ def homeView(page: ft.Page):
             "destino": row[1],
             "data": row[2],
             "arquivo": row[3],
+            "pacientes": row[4],
+            "justificativa": row[5],
         }
         for row in dados_db
     ]
@@ -41,32 +43,43 @@ def homeView(page: ft.Page):
             webbrowser.open(caminho)
         else:
             print("Arquivo não encontrado")
-
+    
     def criar_card(pdf):
+
+        lista_controles = [
+            ft.Text(pdf["destino"], size=16, weight="bold", color=ft.Colors.BLACK),
+            ft.Text(f'Data: {pdf["data"]}', size=12, color=ft.Colors.BLACK),
+            ft.Text(f'Justificativa: {pdf["justificativa"]}', size=12, color=ft.Colors.BLACK),
+        ]
+
+        if pdf.get("pacientes") and str(pdf["pacientes"]).strip():
+            lista_controles.append(
+                ft.Text(f'Pacientes: {pdf["pacientes"]}', size=12, color=ft.Colors.BLACK)
+            )
+
         return ft.Container(
             width=300,
             padding=10,
             border_radius=15,
             bgcolor="white",
-            content=ft.Column(
-                spacing=5,
-                controls=[
-                    ft.Text(pdf["destino"], size=16, weight="bold"),
-                    ft.Text(f'Data: {pdf["data"]}', size=12),
-                    ft.Row(
-                        alignment=ft.MainAxisAlignment.END,
-                        controls=[
-                            ft.IconButton(
-                                icon=ft.Icons.PICTURE_AS_PDF,
-                                tooltip="Abrir PDF",
-                                on_click=lambda e, caminho=pdf["arquivo"]: abrir_pdf(caminho)
-                            )
-                        ]
-                    )
-                ]
-            )
+            content=ft.Stack([
+                ft.Column(
+                    spacing=5,
+                    controls=lista_controles,
+                    width=250 
+                ),
+         
+                ft.IconButton(
+                    icon=ft.Icons.PICTURE_AS_PDF,
+                    icon_color=ft.Colors.RED_700,
+                    tooltip="Abrir PDF",
+                    top=-5,    
+                    right=-5,  
+                    on_click=lambda e, caminho=pdf["arquivo"]: abrir_pdf(caminho)
+                )
+            ])
         )
-
+    
     return ft.View(
         route="/home",
         scroll=ft.ScrollMode.AUTO,

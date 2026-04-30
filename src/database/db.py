@@ -72,7 +72,7 @@ def buscar_requerimentos_por_motorista(motorista_id):
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT id, destino, data_saida, arquivo_pdf
+        SELECT id, destino, data_saida, arquivo_pdf, pacientes, justificativa
         FROM requerimento
         WHERE motorista_id = ?
         ORDER BY id DESC

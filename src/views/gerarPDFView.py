@@ -22,6 +22,7 @@ def gerarPDFView(page: ft.Page):
         campo = ft.TextField(
             hint_text=f"Paciente {len(campos_pacientes) + 1}",
             border=ft.InputBorder.UNDERLINE,
+            color=ft.Colors.BLACK,  
             width=220,
         )
 
@@ -52,6 +53,10 @@ def gerarPDFView(page: ft.Page):
             border=ft.InputBorder.UNDERLINE,
             prefix_icon=icone,
             width=280,
+            color=ft.Colors.BLACK,            
+            border_color=ft.Colors.BLACK,    
+            focused_border_color=ft.Colors.CYAN,
+            hint_style=ft.TextStyle(color=ft.Colors.GREY_400),
         )
 
     campo_destino = campo("Destino")
@@ -66,6 +71,7 @@ def gerarPDFView(page: ft.Page):
             ft.dropdown.Option("Busca de Medicamento"),
             ft.dropdown.Option("Outros"),
         ],
+        color = ft.Colors.BLACK,
     )
 
     seta = ft.Container(
@@ -84,6 +90,7 @@ def gerarPDFView(page: ft.Page):
         read_only=True,
         width=280,
         prefix_icon=ft.Icons.CALENDAR_MONTH,
+        color= ft.Colors.BLACK,
     )
 
     campo_data_chegada = ft.TextField(
@@ -92,6 +99,7 @@ def gerarPDFView(page: ft.Page):
         read_only=True,
         width=280,
         prefix_icon=ft.Icons.CALENDAR_MONTH,
+        color= ft.Colors.BLACK,
     )
 
     date_picker = ft.DatePicker()
@@ -116,9 +124,10 @@ def gerarPDFView(page: ft.Page):
     botao_pacientes = ft.Row(
         alignment=ft.MainAxisAlignment.CENTER,
         controls=[
-            ft.Text("Pacientes"),
+            ft.Text("Pacientes", color=ft.Colors.BLACK),
             ft.IconButton(
                 icon=ft.Icons.ADD,
+                icon_color=ft.Colors.BLACK,
                 on_click=adicionar_paciente
             )
         ]
